@@ -47,8 +47,10 @@
     <div class="tab on" id="tAll" onclick="setTab('all')">ฐานเกรดร่วม</div>
     <div class="tab" id="tBuy" onclick="setTab('buy')">ฝั่งร้านรับซื้อ</div>
     <div class="tab" id="tSell" onclick="setTab('sell')">ฝั่งผู้ขาย</div>
+    <div class="tab" id="tShop" onclick="setTab('shop')">ร้านในอุดรฯ</div>
   </div>
   <div id="status"></div>
+  <div id="shopBox"></div>
 
   <div class="card">
     <h3 class="serif" style="margin-top:0">ค้นหาของเก่า (รู้ข้างในมีอะไร)</h3>
@@ -107,12 +109,27 @@ function retrieve(q,topK=6){const s=load();const items=s.items;if(!items.length)
 function expand(item){const s=load();const out=[];for(const l of s.links){let other=null;if(l.source===item.id)other=l.target;else if(l.target===item.id)other=l.source;if(other){const node=s.items.find(x=>x.id===other);if(node)out.push({relation:l.relation,node});}}return out;}
 const REL={support:"สนับสนุน",contradict:"ขัดแย้ง",related:"เกี่ยวข้อง",derived:"สืบเนื่องจาก"};
 let curTab="all";
-function setTab(t){curTab=t;["all","buy","sell"].forEach(x=>document.getElementById("t"+x[0].toUpperCase()+x.slice(1)).className="tab"+(x===t?" on":""));
-  const titles={all:"เพิ่ม/แก้ เกรดของเก่า (ฐานร่วม)",buy:"ฝั่งร้านรับซื้อ: ใช้ฐานร่วมประเมินราคาให้แม่น",sell:"ฝั่งผู้ขาย: เช็กคุ้มค่าก่อนเอาไปขาย"};
+const SHOPS=[
+  {name:"ร้านวิชัยการค้า",addr:"อ.เมือง อุดรธานี",tel:"094-449-3996, 061-942-4169",buy:"ขยะรีไซเคิล ของเก่าทั่วไป (รับถึงบ้าน)",src:"Facebook"},
+  {name:"มหานครโลหะ สาขาอุดร",addr:"สาขามักม่วน อุดรธานี",tel:"-",buy:"ทองแดง สแตนเลส เหล็ก อลูมิเนียม หม้อน้ำแอร์",src:"Facebook/TikTok"},
+  {name:"ร้าน จึงกิมโอ๊ว",addr:"73-4 ถ.ประชารักษา ต.หมากแข้ง เมืองอุดรฯ",tel:"-",buy:"ของเก่า + เศษเหล็ก",src:"Thailand Yellow Pages"},
+  {name:"ช.ทรัพย์รุ่งโรจน์ (CH-Suprungroj)",addr:"อุดรธานี",tel:"063-821-8889",buy:"เศษเหล็ก สแตนเลส อลูมิเนียม โครงสร้าง เครื่องจักรเก่า",src:"เว็บไซต์"},
+  {name:"Junk2Cash",addr:"อุดรธานี (ครบวงจร)",tel:"088-268-8978",buy:"เศษโลหะโรงงาน/บริษัท ทองแดง",src:"เว็บไซต์"},
+  {name:"กลุ่ม FB อุดรฯ รับซื้อของเก่า",addr:"อุดร/กุมภวาปี/หนองคาย",tel:"06-1535-2008 (เสี่ยนพพร)",buy:"ของเก่า พลาสติก กระดาษ คอมเก่า",src:"Facebook Group"},
+  {name:"เอสโมบาย",addr:"ตรงข้ามตึกคอมอุดร",tel:"092-331-4981",buy:"คอมเก่า แผงวงจร",src:"Facebook Group"},
+];
+function setTab(t){curTab=t;["all","buy","sell","shop"].forEach(x=>document.getElementById("t"+x[0].toUpperCase()+x.slice(1)).className="tab"+(x===t?" on":""));
+  const titles={all:"เพิ่ม/แก้ เกรดของเก่า (ฐานร่วม)",buy:"ฝั่งร้านรับซื้อ: ใช้ฐานร่วมประเมินราคาให้แม่น",sell:"ฝั่งผู้ขาย: เช็กคุ้มค่าก่อนเอาไปขาย",shop:"ร้านรับซื้อของเก่าใน อ.อุดรธานี"};
   document.getElementById("sideTitle").textContent=titles[t];
   if(t==="buy")setStatus("ร้านรับซื้อ: ค้นหาชื่อของ → รู้เกรด → เสนอราคาได้แม่นขึ้น");
   else if(t==="sell")setStatus("ผู้ขาย: ค้นหาชื่อของ → รู้ว่าข้างในมีอะไร → ไม่ถูกกดราคา");
+  else if(t==="shop"){renderShop();setStatus("รายชื่อร้านรับซื้อในอุดรฯ (สำรวจจากเว็บ/โซเชียล) — คลิกโทรได้เลย");}
   else setStatus("");
+}
+function renderShop(){const el=document.getElementById("shopBox");if(!SHOPS.length){el.innerHTML='<div class="muted">ยังไม่มีข้อมูลร้าน</div>';return;}
+  el.innerHTML='<div class="card"><h3 class="serif" style="margin-top:0">ร้านรับซื้อของเก่าใน จ.อุดรธานี</h3>'+
+    SHOPS.map(s=>`<div class="grade"><b>${escapeHtml(s.name)}</b> <span class="muted">${escapeHtml(s.addr)}</span><div style="margin-top:4px">📞 ${escapeHtml(s.tel)}</div><div class="muted" style="margin-top:3px">รับ: ${escapeHtml(s.buy)}</div><div class="muted" style="font-size:11px;margin-top:3px">แหล่ง: ${escapeHtml(s.src)}</div></div>`).join('')+
+    '<div class="muted" style="margin-top:8px">หมายเหตุ: ราคาประเมินหน้างานเป็นปากเปล่า → ใช้ฐานเกรดร่วมข้างบนช่วยต่อรองให้แฟร์</div></div>';
 }
 function ask(){const q=document.getElementById('askQ').value.trim();if(!q)return setStatus('พิมพ์ชื่อของเก่า');const hits=retrieve(q,6);let html='';if(!hits.length)html='<div class="muted">ไม่พบในฐานความรู้ — เพิ่มเองด้านล่าง</div>';hits.forEach(it=>{html+=`<div class="grade"><b>${escapeHtml(it.name)}</b> <span class="muted">(${escapeHtml(it.cat||'')})</span> <span class="price">เกรด</span><div style="white-space:pre-wrap;margin-top:4px">${escapeHtml(it.comp||'')}</div>${it.note?`<div class="muted" style="margin-top:4px">📌 ${escapeHtml(it.note)}</div>`:''}</div>`;const linked=expand(it);if(linked.length){html+=`<div class="muted" style="margin-top:5px">เชื่อมโยง: `+linked.map(l=>`<b class="rel-${l.relation}">${REL[l.relation]}</b> → ${escapeHtml(l.node.name)}`).join(' | ')+`</div>`;}});document.getElementById('result').innerHTML=html;}
 function addItem(){const name=document.getElementById('itName').value.trim();if(!name)return setStatus('ใส่ชื่อของ');const comp=document.getElementById('itComp').value.trim();const note=document.getElementById('itNote').value.trim();const cat=document.getElementById('itCat').value.trim();const s=load();s.items.push({id:uid(),name,cat,comp,note});save(s);document.getElementById('itName').value='';document.getElementById('itComp').value='';document.getElementById('itNote').value='';document.getElementById('itCat').value='';refreshSelects();setStatus('เพิ่ม "'+name+'" แล้ว ('+s.items.length+' รายการ)');}
