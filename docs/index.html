@@ -3,74 +3,80 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>nimnote — รู้ก่อนขาย รู้ก่อนรับซื้อ</title>
+<title>nimnote อุดร — รู้ก่อนขาย รู้ก่อนรับซื้อ</title>
 <style>
-  :root{--bg:#F4F1EA;--ink:#16140F;--accent:#D6452B;--line:#16140F22;--mut:#16140F99;--ok:#1a7f37}
+  :root{--bg:#F4F1EA;--ink:#16140F;--accent:#D6452B;--line:#16140F22;--mut:#16140F99;--ok:#1a7f37;--blue:#1a5fb4}
   *{box-sizing:border-box}
   body{margin:0;font-family:ui-sans-serif,system-ui,"Inter","Sarabun",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
   .serif{font-family:Georgia,"Times New Roman",serif}
-  header{padding:20px 26px;border-bottom:1px solid var(--line)}
-  h1{font-size:26px;margin:0;letter-spacing:-.5px}
+  header{padding:18px 24px;border-bottom:1px solid var(--line)}
+  h1{font-size:24px;margin:0;letter-spacing:-.5px}
   h1 .dot{color:var(--accent)}
-  .tag{font-size:13px;color:var(--mut);margin-top:4px}
+  .tag{font-size:12.5px;color:var(--mut);margin-top:3px}
   .pill{display:inline-block;font-size:11px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--mut);margin-left:6px}
-  main{max-width:900px;margin:0 auto;padding:20px 26px 80px}
-  .card{border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;background:#fff}
-  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:0 0 6px}
-  input,textarea,select{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}
-  .row{display:flex;gap:10px;flex-wrap:wrap}
-  .row>*{flex:1;min-width:140px}
-  button{font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:7px;padding:9px 14px;background:var(--ink);color:var(--bg)}
+  main{max-width:920px;margin:0 auto;padding:18px 24px 80px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:15px;margin:13px 0;background:#fff}
+  label{display:block;font-size:11.5px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:0 0 5px}
+  input,textarea,select{width:100%;font:inherit;padding:8px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}
+  .row{display:flex;gap:9px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:130px}
+  button{font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:7px;padding:8px 13px;background:var(--ink);color:var(--bg)}
   button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
   button:hover{opacity:.88}
-  pre{background:#16140F;color:#F4F1EA;padding:14px;border-radius:8px;overflow:auto;max-height:360px;font-size:12.5px;white-space:pre-wrap;word-break:break-word}
-  .muted{color:var(--mut);font-size:13px}
-  .res{margin-top:12px}
-  #status{font-size:13px;color:var(--accent);min-height:18px}
+  .tabs{display:flex;gap:6px;margin:4px 0 12px}
+  .tab{padding:7px 13px;border:1px solid var(--line);border-radius:999px;cursor:pointer;font-size:13px;background:#fff}
+  .tab.on{background:var(--ink);color:var(--bg)}
   .grade{border-left:3px solid var(--accent);padding:8px 12px;margin:8px 0;background:#fff8;border-radius:0 8px 8px 0}
   .grade b{color:var(--accent)}
-  .rel-support{color:var(--ok)}.rel-contradicts{color:var(--accent)}.rel-related{color:#1a5fb4}.rel-derived{color:#7a4fb4}
-  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
-  th,td{border:1px solid var(--line);padding:6px 8px;text-align:left}
-  th{background:#16140F0a}
+  .price{background:var(--ok);color:#fff;padding:2px 8px;border-radius:6px;font-size:12px}
+  .muted{color:var(--mut);font-size:12.5px}
+  .res{margin-top:10px}
+  #status{font-size:12.5px;color:var(--accent);min-height:17px}
+  .rel-support{color:var(--ok)}.rel-contradicts{color:var(--accent)}.rel-related{color:var(--blue)}.rel-derived{color:#7a4fb4}
+  .two{background:linear-gradient(90deg,#fff8,#f0f7ff)}
 </style>
 </head>
 <body>
 <header>
-  <h1 class="serif">nimnote<span class="dot">.</span></h1>
-  <div class="tag">ฐานความรู้ "ของชิ้นนี้ ข้างในมีอะไร" — รู้ก่อนขาย รู้ก่อนรับซื้อ <span class="pill">เกรดของเก่า</span></div>
+  <h1 class="serif">nimnote<span class="dot">.</span> อุดร</h1>
+  <div class="tag">แพลตฟอร์มตัวกลาง จ.อุดรธานี — รู้ก่อนขาย รู้ก่อนรับซื้อ <span class="pill">โปร่งใสทั้งสองฝั่ง</span></div>
 </header>
 
 <main>
+  <div class="tabs">
+    <div class="tab on" id="tAll" onclick="setTab('all')">ฐานเกรดร่วม</div>
+    <div class="tab" id="tBuy" onclick="setTab('buy')">ฝั่งร้านรับซื้อ</div>
+    <div class="tab" id="tSell" onclick="setTab('sell')">ฝั่งผู้ขาย</div>
+  </div>
   <div id="status"></div>
 
   <div class="card">
-    <h3 class="serif" style="margin-top:0">ค้นหาของเก่า (พิมพ์ชื่อสินค้า/ชนิด)</h3>
+    <h3 class="serif" style="margin-top:0">ค้นหาของเก่า (รู้ข้างในมีอะไร)</h3>
     <div class="row">
       <div style="flex:4"><input id="askQ" placeholder="เช่น PCB โทรศัพท์, เครื่องซักผ้า, สายไฟ, iPhone12"></div>
       <div style="flex:1"><button onclick="ask()">ดูเกรด</button></div>
     </div>
-    <div class="muted" style="margin-top:6px">หรือโหลดฐานความรู้ตัวอย่าง (เกรด PCB / เครื่องใช้ไฟฟ้า) เพื่อดูคุณค่า</div>
-    <div style="margin-top:8px"><button class="ghost" onclick="loadSample()">โหลดฐานความรู้ตัวอย่าง</button></div>
+    <div class="muted" style="margin-top:6px">หรือโหลดฐานความรู้ตัวอย่าง (เกรดของเก่า อ.อุดร)</div>
+    <div style="margin-top:7px"><button class="ghost" onclick="loadSample()">โหลดฐานความรู้ตัวอย่าง</button></div>
     <div class="res" id="result"></div>
   </div>
 
-  <div class="card">
-    <h3 class="serif" style="margin-top:0">เพิ่ม/แก้ เกรดของเก่าเอง</h3>
+  <div class="card two">
+    <h3 class="serif" style="margin-top:0" id="sideTitle">เพิ่ม/แก้ เกรดของเก่า (ฐานร่วม)</h3>
     <div class="row">
       <div style="flex:2"><label>ชื่อของ</label><input id="itName" placeholder="เช่น PCB โทรศัพท์มือถือ"></div>
       <div style="flex:1"><label>หมวด</label><input id="itCat" placeholder="เช่น PCB"></div>
     </div>
-    <label style="margin-top:10px">องค์ประกอบโลหะ (ชื่อ:กรัมต่อตัน หรือ %)</label>
+    <label style="margin-top:9px">องค์ประกอบโลหะ (ชื่อ:กรัมต่อตัน หรือ %)</label>
     <textarea id="itComp" placeholder="ทองคำ:350 g/t&#10;เงิน:2640 ppm&#10;ทองแดง:13%&#10;พาลาเดียม:119 ppm"></textarea>
-    <label style="margin-top:10px">ราคาอ้างอิง / หมายเหตุ</label>
-    <textarea id="itNote" placeholder="อ้างอิง: Sahan 2019, EPA 2018"></textarea>
-    <div style="margin-top:10px"><button onclick="addItem()">เพิ่มลงฐานความรู้</button></div>
+    <label style="margin-top:9px">ราคาอ้างอิง / หมายเหตุ</label>
+    <textarea id="itNote" placeholder="อ้างอิง: Sahan 2019, EPA 2018 — ทองคำสูงกว่าแร่ ~100-800 เท่า"></textarea>
+    <div style="margin-top:9px"><button onclick="addItem()">เพิ่มลงฐานร่วม</button></div>
   </div>
 
   <div class="card">
     <h3 class="serif" style="margin-top:0">ความเชื่อมโยง (linked memory)</h3>
-    <div class="linkrow row">
+    <div class="row">
       <select id="lnSrc" style="flex:2"></select>
       <select id="lnRel" style="flex:1">
         <option value="support">สนับสนุน</option>
@@ -86,46 +92,48 @@
 </main>
 
 <script>
-/* ===== nimnote: ฐานความรู้เกรดของเก่า (local, Thai tokenizer) ===== */
-const THAI_DICT=new Set(("และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็ ทองคำ ทองแดง เงิน พาลาเดียม ดีบุก ตะกั่ว ทองแดง โลหะ มีค่า แผงวงจร วงจร โทรศัพท์ มือถือ รีไฟน์ กู้คืน กระบวนการ ขยะ อิเล็กทรอนิกส์ เครื่องจักร สกัด ถลุง แร่ หน้าตัก ตัน กรัม ความรู้ สมุด บันทึก เอกสาร งานวิจัย ฐานราก ชั้น เชื่อมโยง ประเภท คอปเปอร์ ทองแดง แพลทินัม ปริมาณ ร้อยละ อัตรา ผลิตภัณฑ์ มูลค่า เศรษฐกิจ เครื่องซักผ้า ตู้เย็น สายไฟ คอมเพรสเซอร์ มอเตอร์ เหล็ก ทองคำ เกรด ของเก่า รับซื้อ").split(" "));
+/* ===== nimnote อุดร: two-sided grading knowledge base (local, Thai tokenizer) ===== */
+const THAI_DICT=new Set(("และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็ ทองคำ ทองแดง เงิน พาลาเดียม ดีบุก ตะกั่ว ทองแดง โลหะ มีค่า แผงวงจร วงจร โทรศัพท์ มือถือ รีไฟน์ กู้คืน กระบวนการ ขยะ อิเล็กทรอนิกส์ เครื่องจักร สกัด ถลุง แร่ หน้าตัก ตัน กรัม ความรู้ สมุด บันทึก เอกสาร งานวิจัย ฐานราก ชั้น เชื่อมโยง ประเภท คอปเปอร์ ทองแดง แพลทินัม ปริมาณ ร้อยละ อัตรา ผลิตภัณฑ์ มูลค่า เศรษฐกิจ เครื่องซักผ้า ตู้เย็น สายไฟ คอมเพรสเซอร์ มอเตอร์ เหล็ก ทองคำ เกรด ของเก่า รับซื้อ อุดรธานี โปร่งใส ผู้ขาย ร้าน").split(" "));
 const isThai=ch=>{const c=ch.codePointAt(0);return c>=0x0E00&&c<=0x0E7F;};
 function segmentThai(run){const out=[];let i=0;while(i<run.length){let m="",j=i+1;while(j<=run.length){const cand=run.slice(i,j);if(THAI_DICT.has(cand)&&cand.length>m.length)m=cand;j++;}if(m){out.push(m);i+=m.length;}else{if(i+1<run.length)out.push(run.slice(i,i+2));else out.push(run.slice(i,i+1));i++;}}return out;}
 function tokenize(text){const lower=(text||"").toLowerCase();const out=[];let buf="",bt=false;const flush=()=>{if(!buf)return;if(bt)out.push(...segmentThai(buf));else for(const w of buf.match(/[a-z0-9]+/g)||[])if(w.length>1)out.push(w);buf="";};for(const ch of lower){const t=isThai(ch);if((t&&!bt)||(!t&&bt)){flush();bt=t;}if(t||/[a-z0-9]/.test(ch))buf+=ch;else flush();}flush();return out;}
 const STOP=new Set(("the a an and or of to in on for with is are be this that it as at by from we you they he she but if then so their our your his her them us not no can will would could should may might must do does did has have had was were been being ของ และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็").split(" "));
 function terms(text){return tokenize(text).filter(t=>!STOP.has(t));}
-const STORE_KEY="nimnote_grade_v1";
+const STORE_KEY="nimnote_udon_v1";
 function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{items:[],links:[]};}catch(e){return{items:[],links:[]};}}
 function save(s){localStorage.setItem(STORE_KEY,JSON.stringify(s));}
 function uid(){return Math.random().toString(36).slice(2,14);}
-function retrieve(q,topK=5){const s=load();const items=s.items;if(!items.length)return[];const n=items.length,df={};for(const it of items)for(const t of new Set(terms(it.name+" "+(it.cat||""))))df[t]=(df[t]||0)+1;const qterms=terms(q),scored=[];for(const it of items){const tf={};for(const t of terms(it.name+" "+(it.cat||"")))tf[t]=(tf[t]||0)+1;let sc=0;for(const qt of qterms)if(qt in tf){const idf=Math.log((n+1)/(df[qt]+1))+1;sc+=tf[qt]*idf;}if(sc>0)scored.push([sc,it]);}scored.sort((a,b)=>b[0]-a[0]);return scored.slice(0,topK).map(([sc,it])=>it);}
+function retrieve(q,topK=6){const s=load();const items=s.items;if(!items.length)return[];const n=items.length,df={};for(const it of items)for(const t of new Set(terms(it.name+" "+(it.cat||""))))df[t]=(df[t]||0)+1;const qterms=terms(q),scored=[];for(const it of items){const tf={};for(const t of terms(it.name+" "+(it.cat||"")))tf[t]=(tf[t]||0)+1;let sc=0;for(const qt of qterms)if(qt in tf){const idf=Math.log((n+1)/(df[qt]+1))+1;sc+=tf[qt]*idf;}if(sc>0)scored.push([sc,it]);}scored.sort((a,b)=>b[0]-a[0]);return scored.slice(0,topK).map(([sc,it])=>it);}
 function expand(item){const s=load();const out=[];for(const l of s.links){let other=null;if(l.source===item.id)other=l.target;else if(l.target===item.id)other=l.source;if(other){const node=s.items.find(x=>x.id===other);if(node)out.push({relation:l.relation,node});}}return out;}
 const REL={support:"สนับสนุน",contradict:"ขัดแย้ง",related:"เกี่ยวข้อง",derived:"สืบเนื่องจาก"};
-
-function ask(){const q=document.getElementById('askQ').value.trim();if(!q)return setStatus('พิมพ์ชื่อของเก่า');const hits=retrieve(q,5);let html='';if(!hits.length)html='<div class="muted">ไม่พบในฐานความรู้ — ลองเพิ่มเองด้านล่าง</div>';hits.forEach(it=>{html+=`<div class="grade"><b>${escapeHtml(it.name)}</b> <span class="muted">(${escapeHtml(it.cat||'')})</span><div style="white-space:pre-wrap;margin-top:4px">${escapeHtml(it.comp||'')}</div>${it.note?`<div class="muted" style="margin-top:4px">📌 ${escapeHtml(it.note)}</div>`:''}</div>`;const linked=expand(it);if(linked.length){html+=`<div class="muted" style="margin-top:6px">เชื่อมโยง: `+linked.map(l=>`<b class="rel-${l.relation}">${REL[l.relation]}</b> → ${escapeHtml(l.node.name)}`).join(' | ')+`</div>`;}});document.getElementById('result').innerHTML=html;}
-
+let curTab="all";
+function setTab(t){curTab=t;["all","buy","sell"].forEach(x=>document.getElementById("t"+x[0].toUpperCase()+x.slice(1)).className="tab"+(x===t?" on":""));
+  const titles={all:"เพิ่ม/แก้ เกรดของเก่า (ฐานร่วม)",buy:"ฝั่งร้านรับซื้อ: ใช้ฐานร่วมประเมินราคาให้แม่น",sell:"ฝั่งผู้ขาย: เช็กคุ้มค่าก่อนเอาไปขาย"};
+  document.getElementById("sideTitle").textContent=titles[t];
+  if(t==="buy")setStatus("ร้านรับซื้อ: ค้นหาชื่อของ → รู้เกรด → เสนอราคาได้แม่นขึ้น");
+  else if(t==="sell")setStatus("ผู้ขาย: ค้นหาชื่อของ → รู้ว่าข้างในมีอะไร → ไม่ถูกกดราคา");
+  else setStatus("");
+}
+function ask(){const q=document.getElementById('askQ').value.trim();if(!q)return setStatus('พิมพ์ชื่อของเก่า');const hits=retrieve(q,6);let html='';if(!hits.length)html='<div class="muted">ไม่พบในฐานความรู้ — เพิ่มเองด้านล่าง</div>';hits.forEach(it=>{html+=`<div class="grade"><b>${escapeHtml(it.name)}</b> <span class="muted">(${escapeHtml(it.cat||'')})</span> <span class="price">เกรด</span><div style="white-space:pre-wrap;margin-top:4px">${escapeHtml(it.comp||'')}</div>${it.note?`<div class="muted" style="margin-top:4px">📌 ${escapeHtml(it.note)}</div>`:''}</div>`;const linked=expand(it);if(linked.length){html+=`<div class="muted" style="margin-top:5px">เชื่อมโยง: `+linked.map(l=>`<b class="rel-${l.relation}">${REL[l.relation]}</b> → ${escapeHtml(l.node.name)}`).join(' | ')+`</div>`;}});document.getElementById('result').innerHTML=html;}
 function addItem(){const name=document.getElementById('itName').value.trim();if(!name)return setStatus('ใส่ชื่อของ');const comp=document.getElementById('itComp').value.trim();const note=document.getElementById('itNote').value.trim();const cat=document.getElementById('itCat').value.trim();const s=load();s.items.push({id:uid(),name,cat,comp,note});save(s);document.getElementById('itName').value='';document.getElementById('itComp').value='';document.getElementById('itNote').value='';document.getElementById('itCat').value='';refreshSelects();setStatus('เพิ่ม "'+name+'" แล้ว ('+s.items.length+' รายการ)');}
-
 function refreshSelects(){const s=load();const opt=s.items.map(x=>`<option value="${x.id}">${escapeHtml(x.name)}</option>`).join('');document.getElementById('lnSrc').innerHTML=opt;document.getElementById('lnTgt').innerHTML=opt;}
 function addLink(){const src=document.getElementById('lnSrc').value,tgt=document.getElementById('lnTgt').value,rel=document.getElementById('lnRel').value;if(!src||!tgt||src===tgt)return setStatus('เลือกสองรายการต่างกัน');const s=load();s.links.push({id:uid(),source:src,relation:rel,target:tgt});save(s);renderLinks();setStatus('เชื่อมโยงแล้ว');}
 function renderLinks(){const s=load();const el=document.getElementById('linkList');if(!s.links.length){el.innerHTML='<span class="muted">ยังไม่มีความเชื่อมโยง</span>';return;}const nm=id=>{const x=s.items.find(i=>i.id===id);return x?x.name:id;};el.innerHTML=s.links.map(l=>`<div>• ${escapeHtml(nm(l.source))} —<b class="rel-${l.relation}"> ${REL[l.relation]} </b>→ ${escapeHtml(nm(l.target))}</div>`).join('');}
-
 function setStatus(m){document.getElementById('status').textContent=m||'';}
 function escapeHtml(s){return(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-
 function loadSample(){
   const items=[
     {name:"PCB โทรศัพท์มือถือ",cat:"PCB",comp:"ทองคำ: 350 g/t\nเงิน: 2640 ppm\nทองแดง: 13%\nพาลาเดียม: 119 ppm",note:"อ้างอิง: Sahan 2019, EPA 2018 — ทองคำสูงกว่าแร่ ~100-800 เท่า"},
     {name:"PCB คอมพิวเตอร์",cat:"PCB",comp:"ทองคำ: 250 g/t\nเงิน: ~1000+ g/t\nทองแดง: 20%\nพาลาเดียม: ~110 g/t",note:"อ้างอิง: Hagelüken — ทองแดงสูงสุดใน PCB"},
     {name:"เครื่องซักผ้า",cat:"เครื่องใช้ไฟฟ้า",comp:"เหล็ก: โครงเครื่อง\nทองแดง: วงจร/สายไฟ/มอเตอร์\nอะลูมิเนียม: บางส่วน",note:"คอมเพรสเซอร์แยกขายได้ ~15-25 บาท (ทองแดง)"},
     {name:"สายไฟ",cat:"สายไฟ",comp:"ทองแดง: แกนใน (bare bright สุดค่า)\nพลาสติก: ฉนวน",note:"สายทองแดงเปลือยราคาสูงสุด — ถอดเปลือกก่อนขายคุ้มกว่า"},
-    {name:"iPhone 12 (พัง)",cat:"PCB",comp:"ทองคำ: ~0.034 g/เครื่อง\nเงิน+ทองแดง: แผงวงจร + ขั้วชาร์จ",note:"1 ตัน PCB โทรศัพท์ ≈ ทอง 350 g — เครื่องเดียวน้อย但รวมเยอะ"},
+    {name:"iPhone 12 (พัง)",cat:"PCB",comp:"ทองคำ: ~0.034 g/เครื่อง\nเงิน+ทองแดง: แผงวงจร + ขั้วชาร์จ",note:"1 ตัน PCB โทรศัพท์ ≈ ทอง 350 g — เครื่องเดียวน้อยแต่รวมเยอะ"},
   ].map(x=>({id:uid(),...x}));
   const links=[
     {source:items[0].id,relation:"derived",target:items[4].id},
     {source:items[1].id,relation:"support",target:items[0].id},
   ].map(l=>({id:uid(),...l}));
-  save({items,links});
-  refreshSelects();renderLinks();
+  save({items,links});refreshSelects();renderLinks();
   setStatus('โหลดฐานความรู้ตัวอย่างแล้ว — ลองค้นหา "PCB" หรือ "โทรศัพท์"');
   document.getElementById('askQ').value='PCB โทรศัพท์';ask();
 }
