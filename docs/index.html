@@ -3,7 +3,7 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>nimnote — งานวิจัยบนเครื่องตัวเอง</title>
+<title>nimnote — ชั้นความจำฐานรากสำหรับ AI ของคุณ</title>
 <style>
   :root{--bg:#F4F1EA;--ink:#16140F;--accent:#D6452B;--line:#16140F22;--mut:#16140F99}
   *{box-sizing:border-box}
@@ -13,7 +13,8 @@
   h1{font-size:28px;margin:0;letter-spacing:-.5px}
   h1 .dot{color:var(--accent)}
   .tag{font-size:13px;color:var(--mut)}
-  main{max-width:940px;margin:0 auto;padding:24px 28px 80px}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--mut);margin-left:6px}
+  main{max-width:960px;margin:0 auto;padding:24px 28px 80px}
   .card{border:1px solid var(--line);border-radius:10px;padding:18px;margin:16px 0;background:#fff}
   label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:0 0 6px}
   input,textarea,select{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}
@@ -26,51 +27,57 @@
   .nb{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:8px 0;cursor:pointer}
   .nb.sel{outline:2px solid var(--accent);outline-offset:-2px}
   .nb small{color:var(--mut);margin-left:auto}
-  pre{background:#16140F;color:#F4F1EA;padding:14px;border-radius:8px;overflow:auto;max-height:340px;font-size:12.5px;white-space:pre-wrap;word-break:break-word}
+  pre{background:#16140F;color:#F4F1EA;padding:14px;border-radius:8px;overflow:auto;max-height:360px;font-size:12.5px;white-space:pre-wrap;word-break:break-word}
   .muted{color:var(--mut);font-size:13px}
-  .pill{display:inline-block;font-size:11px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--mut);margin-left:6px}
   .res{margin-top:12px}
   #status{font-size:13px;color:var(--accent);min-height:18px}
+  .axis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
+  @media(max-width:680px){.axis{grid-template-columns:1fr}}
+  .axis div{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff8}
+  .axis b{color:var(--accent)}
+  .linkrow{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
 </style>
 </head>
 <body>
 <header>
   <div>
     <h1 class="serif">nimnote<span class="dot">.</span></h1>
-    <div class="tag">งานวิจัยบนเครื่องตัวเอง — สปิริตเดียวกับ NotebookLM แบบออฟไลน์</div>
+    <div class="tag">ชั้นความจำฐานรากสำหรับ AI — อยู่บนเครื่องคุณ ไม่ผูกข้างใด <span class="pill">shovel, not gold</span></div>
   </div>
   <div class="tag" id="homenote"></div>
 </header>
 
 <main>
+  <div class="axis">
+    <div><b>① ฐานความรู้ส่วนตัว</b><br><span class="muted">เอกสารของคุณ อยู่บนเครื่อง ไม่รั่วไหล</span></div>
+    <div><b>② ความจำเชื่อมโยง</b><br><span class="muted">ผูกแหล่งข้อมูล/โน้ตเข้าด้วยกันแบบมีประเภท</span></div>
+    <div><b>③ ส่งออกให้ AI ตัวไหนก็ได้</b><br><span class="muted">ได้ prompt พร้อมอ้างอิง ไปวางใน LLM ที่คุณใช้</span></div>
+  </div>
+
   <div id="status"></div>
 
   <div class="card">
     <div class="row">
       <div style="flex:3">
-        <label>ชื่อสมุดบันทึก</label>
-        <input id="nbTitle" placeholder="เช่น โลหะมีค่าจากขยะอิเล็กทรอนิกส์">
+        <label>ชื่อพื้นที่ความรู้</label>
+        <input id="nbTitle" placeholder="เช่น เกรดโลหะ PCB / คดีความปี 69 / วิทยานิพนธ์">
       </div>
       <div style="flex:1;display:flex;align-items:flex-end">
-        <button onclick="createNb()">+ สมุดใหม่</button>
+        <button onclick="createNb()">+ สร้างพื้นที่</button>
       </div>
     </div>
     <div id="nbList" style="margin-top:12px"></div>
   </div>
 
   <div class="card" id="workCard" style="display:none">
-    <h3 class="serif" style="margin-top:0">เพิ่มแหล่งข้อมูล</h3>
+    <h3 class="serif" style="margin-top:0">① เพิ่มแหล่งข้อมูล</h3>
     <div class="row">
-      <div>
-        <label>ชื่อเรื่อง</label>
-        <input id="srcTitle" placeholder="เช่น PCB โทรศัพท์มือถือ">
-      </div>
-      <div>
-        <label>ประเภท</label>
+      <div><label>ชื่อเรื่อง</label><input id="srcTitle" placeholder="เช่น รายงานทองคำ PCB"></div>
+      <div><label>ประเภท</label>
         <select id="srcType">
           <option value="text">ข้อความ</option>
           <option value="url">ลิงก์ URL</option>
-          <option value="file">ไฟล์ (อัปโหลด)</option>
+          <option value="file">ไฟล์</option>
         </select>
       </div>
     </div>
@@ -80,32 +87,40 @@
     <div style="margin-top:10px"><button onclick="addSource()">เพิ่มแหล่งข้อมูล</button></div>
 
     <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
+    <h3 class="serif" style="margin-top:0">② เชื่อมโยงความจำ (linked memory)</h3>
+    <div class="linkrow">
+      <span class="muted">ผูก</span>
+      <select id="lnSrc" style="flex:2"></select>
+      <select id="lnRel" style="flex:1">
+        <option value="supports">สนับสนุน</option>
+        <option value="contradicts">ขัดแย้ง</option>
+        <option value="related">เกี่ยวข้อง</option>
+        <option value="derived">สืบเนื่องจาก</option>
+      </select>
+      <select id="lnTgt" style="flex:2"></select>
+      <button onclick="addLink()">เชื่อมโยง</button>
+    </div>
+    <div id="linkList" class="muted" style="margin-top:8px"></div>
 
-    <h3 class="serif" style="margin-top:0">ค้นหา (TF-IDF + ไทย bigram)</h3>
+    <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
+    <h3 class="serif" style="margin-top:0">ค้นหา (TF-IDF + ไทย bigram) + ขยายผ่านความเชื่อมโยง</h3>
     <div class="row">
-      <div style="flex:4">
-        <input id="askQ" placeholder="เช่น โลหะมีค่า">
-      </div>
+      <div style="flex:4"><input id="askQ" placeholder="เช่น โลหะมีค่า"></div>
       <div style="flex:1"><button onclick="ask()">ค้นหา</button></div>
     </div>
 
     <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
-
-    <h3 class="serif" style="margin-top:0">สร้างผลลัพธ์ (artifact)</h3>
+    <h3 class="serif" style="margin-top:0">③ สร้างชุดข้อมูลให้ AI (artifact)</h3>
     <div class="row">
       <div style="flex:2">
         <select id="genKind">
           <option value="datatable">ตารางข้อมูล (CSV)</option>
           <option value="citation">ดัชนีอ้างอิง (MD)</option>
           <option value="mindmap">แผนที่ความคิด (JSON)</option>
-          <option value="report">รายงาน (ต้องใช้ LLM)</option>
-          <option value="quiz">แบบทดสอบ (ต้องใช้ LLM)</option>
-          <option value="flashcards">การ์ดท่อง (ต้องใช้ LLM)</option>
+          <option value="grounded_prompt">Prompt พร้อมอ้างอิง (สำหรับ LLM)</option>
         </select>
       </div>
-      <div style="flex:2">
-        <input id="genQ" placeholder="คำถาม (ถ้ามี)">
-      </div>
+      <div style="flex:2"><input id="genQ" placeholder="คำถาม/โจทย์ (ถ้ามี)"></div>
       <div style="flex:1"><button onclick="generate()">สร้าง</button></div>
     </div>
 
@@ -113,185 +128,138 @@
   </div>
 
   <div class="muted">
-    คำใบ้: ตั้ง <code>NIMNOTE_BASE_URL</code> + <code>NIMNOTE_API_KEY</code> สำหรับรายงาน/แบบทดสอบ/การ์ดท่อง (LLM) แต่หน้านี้ทำงานออฟไลน์ได้เลยโดยไม่ต้องมี ไม่มีเซิร์ฟเวอร์
+    แนวคิด: คนส่วนใหญ่แข่งทำ "ปลายทาง" (แชทฉลาดๆ เหมือน NotebookLM) — แต่โอกาสที่แท้จริงคือ
+    <b>ฐานรากที่ทุกปลายทางต้องพิง</b>: ข้อมูลที่จัดโครงสร้าง + เก็บส่วนตัว + เชื่อมโยงกัน → nimnote คือ "จอบ" ไม่ใช่ "ทอง"
   </div>
 </main>
 
 <script>
-/* ============ nimnote core (ported to JS, client-side, localStorage) ============ */
-const CHUNK_SIZE = 900, OVERLAP = 120;
-const STORE_KEY = "nimnote_store_v1";
-
-// Thai unicode range
-function isThai(ch){ const c = ch.codePointAt(0); return c >= 0x0E00 && c <= 0x0E7F; }
-
+/* ============ nimnote core: shovel layer (client-side, localStorage) ============ */
+const CHUNK_SIZE=900,OVERLAP=120,STORE_KEY="nimnote_store_v2";
+const isThai=ch=>{const c=ch.codePointAt(0);return c>=0x0E00&&c<=0x0E7F;};
 function _tokenize(text){
-  const lower = (text||"").toLowerCase();
-  const toks = lower.match(/[a-z0-9\u0E00-\u0E7F]+/g) || [];
-  const out = [];
-  for(const t of toks){
-    if(t.length <= 1) continue;
-    out.push(t);
-    // Thai has no spaces -> add char bigrams
-    if([...t].some(isThai) && t.length >= 2){
-      for(let i=0;i<t.length-1;i++) out.push(t.slice(i,i+2));
+  const lower=(text||"").toLowerCase();
+  const toks=lower.match(/[a-z0-9\u0E00-\u0E7F]+/g)||[];
+  const out=[];
+  for(const t of toks){ if(t.length<=1)continue; out.push(t);
+    if([...t].some(isThai)&&t.length>=2){ for(let i=0;i<t.length-1;i++)out.push(t.slice(i,i+2)); } }
+  return out;
+}
+const STOP=new Set(("the a an and or of to in on for with is are be this that it as at by from we you they he she but if then so their our your his her them us not no can will would could should may might must do does did has have had was were been being ของ และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็ ไป").split(" "));
+function _terms(text){return _tokenize(text).filter(t=>!STOP.has(t));}
+function chunkText(text){text=(text||"").trim();if(!text)return[];const ch=[];let s=0,i=0;while(s<text.length){let e=Math.min(s+CHUNK_SIZE,text.length);ch.push({cid:Math.random().toString(36).slice(2,10),idx:i++,text:text.slice(s,e)});if(e===text.length)break;s=e-OVERLAP;}return ch;}
+function uid(){return Math.random().toString(36).slice(2,14);}
+function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{notebooks:{}};}catch(e){return{notebooks:{}};}}
+function saveStore(s){localStorage.setItem(STORE_KEY,JSON.stringify(s));}
+function getNb(){const s=loadStore();return selected?s.notebooks[selected]:null;}
+
+function retrieve(nb,query,topK=5){
+  const chunks=[];
+  for(const s of(nb.sources||[]))for(const c of(s.chunks||[]))chunks.push([s,c]);
+  if(!chunks.length)return[];
+  const n=chunks.length,df={};
+  for(const[_,c]of chunks)for(const t of new Set(_tokenize(c.text)))df[t]=(df[t]||0)+1;
+  const qterms=_tokenize(query),scored=[];
+  for(const[s,c]of chunks){const tf={};for(const t of _tokenize(c.text))tf[t]=(tf[t]||0)+1;let sc=0;
+    for(const qt of qterms){if(qt in tf){const idf=Math.log((n+1)/(df[qt]+1))+1;sc+=tf[qt]*idf;}}
+    if(sc>0)scored.push([sc,s,c]);}
+  scored.sort((a,b)=>b[0]-a[0]);
+  return scored.slice(0,topK).map(([sc,s,c])=>({source:s.title,cid:c.cid,score:sc,text:c.text}));
+}
+// expand through links (BFS 1 hop)
+function expand(nb,seeds){
+  const out=[];const seen=new Set(seeds.map(s=>s.source));
+  for(const seed of seeds){
+    for(const l of(nb.links||[])){
+      let other=null;
+      if(l.source===seed.cid)other=l.target;
+      else if(l.target===seed.cid)other=l.source;
+      if(other&&!seen.has(other)){seen.add(other);
+        const src=nb.sources.find(x=>x.cid===other)||nb.notes.find(x=>x.cid===other);
+        if(src)out.push({via:'link',relation:l.relation,node:src});
+      }
     }
   }
   return out;
 }
-
-const STOP = new Set(("the a an and or of to in on for with is are be this that it as at by from we you they he she but if then so their our your his her them us not no can will would could should may might must do does did has have had was were been being ของ และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็ ไป").split(" "));
-function _terms(text){ return _tokenize(text).filter(t=>!STOP.has(t)); }
-
-function chunkText(text){
-  text = (text||"").trim();
-  if(!text) return [];
-  const chunks = []; let start = 0, idx = 0;
-  while(start < text.length){
-    let end = Math.min(start+CHUNK_SIZE, text.length);
-    chunks.push({cid: Math.random().toString(36).slice(2,10), idx: idx++, text: text.slice(start,end)});
-    if(end === text.length) break;
-    start = end - OVERLAP;
-  }
-  return chunks;
-}
-
-function uid(){ return Math.random().toString(36).slice(2,14); }
-
-function loadStore(){ try{ return JSON.parse(localStorage.getItem(STORE_KEY)) || {notebooks:{}}; }catch(e){ return {notebooks:{}}; } }
-function saveStore(s){ localStorage.setItem(STORE_KEY, JSON.stringify(s)); }
-
-function retrieve(nb, query, topK=5){
-  const chunks = [];
-  for(const s of (nb.sources||[])) for(const c of (s.chunks||[])) chunks.push([s,c]);
-  if(!chunks.length) return [];
-  const n = chunks.length;
-  const df = {};
-  for(const [_,c] of chunks){ for(const t of new Set(_tokenize(c.text))) df[t]=(df[t]||0)+1; }
-  const qterms = _tokenize(query);
-  const scored = [];
-  for(const [s,c] of chunks){
-    const tf = {}; for(const t of _tokenize(c.text)) tf[t]=(tf[t]||0)+1;
-    let score = 0;
-    for(const qt of qterms){ if(qt in tf){ const idf = Math.log((n+1)/(df[qt]+1))+1; score += tf[qt]*idf; } }
-    if(score>0) scored.push([score,s,c]);
-  }
-  scored.sort((a,b)=>b[0]-a[0]);
-  return scored.slice(0,topK).map(([sc,s,c])=>({source:s.title, cid:c.cid, score:sc, text:c.text}));
-}
-
 function buildDataTable(nb){
-  const rows=[]; const glob={};
-  for(const s of (nb.sources||[])){
-    const toks=_terms(s.content||"");
-    for(const t of toks) glob[t]=(glob[t]||0)+1;
-    const top=[...new Set(toks)].slice(0,5).join(", ");
-    rows.push({id:s.id,title:s.title,kind:s.kind,chars:(s.content||"").length,chunks:(s.chunks||[]).length,top_terms:top});
-  }
-  let out="id,title,kind,chars,chunks,top_terms\n";
-  for(const r of rows) out+=`${r.id},"${r.title}",${r.kind},${r.chars},${r.chunks},"${r.top_terms}"\n`;
-  out+="\n# Global top terms\n";
-  const sorted=Object.entries(glob).sort((a,b)=>b[1]-a[1]).slice(0,20);
-  for(const [t,c] of sorted) out+=`${t},${c}\n`;
-  return out;
+  const rows=[],glob={};
+  for(const s of(nb.sources||[])){const toks=_terms(s.content||"");for(const t of toks)glob[t]=(glob[t]||0)+1;
+    rows.push({id:s.id,title:s.title,kind:s.kind,chars:(s.content||"").length,chunks:(s.chunks||[]).length,top_terms:[...new Set(toks)].slice(0,5).join(", ")});}
+  let o="id,title,kind,chars,chunks,top_terms\n";
+  for(const r of rows)o+=`${r.id},"${r.title}",${r.kind},${r.chars},${r.chunks},"${r.top_terms}"\n`;
+  o+="\n# Global top terms\n";
+  for(const[t,c]of Object.entries(glob).sort((a,b)=>b[1]-a[1]).slice(0,20))o+=`${t},${c}\n`;
+  return o;
 }
+function buildCitation(nb){let o="# ดัชนีการอ้างอิง\n\n";for(const s of(nb.sources||[])){o+=`## [${s.id}] ${s.title} (${s.kind})\n`;for(const c of(s.chunks||[]))o+=`- ${c.cid}: ${c.text.slice(0,160).replace(/\n/g," ")}...\n`;}return o;}
+function buildMindmap(nb){const t={space:nb.title,sources:[]};for(const s of(nb.sources||[]))t.sources.push({id:s.id,title:s.title,terms:[...new Set(_terms(s.content||""))].slice(0,8)});return t;}
 
-function buildCitation(nb){
-  let out="# ดัชนีการอ้างอิง\n\n";
-  for(const s of (nb.sources||[])){
-    out+=`## [${s.id}] ${s.title} (${s.kind})\n`;
-    for(const c of (s.chunks||[])) out+=`- ${c.cid}: ${c.text.slice(0,160).replace(/\n/g," ")}...\n`;
-  }
-  return out;
-}
-
-function buildMindmap(nb){
-  const tree={notebook:nb.title, sources:[]};
-  for(const s of (nb.sources||[])){
-    const terms=[...new Set(_terms(s.content||""))].slice(0,8);
-    tree.sources.push({id:s.id,title:s.title,terms});
-  }
-  return tree;
-}
-
-/* ============ UI wiring ============ */
+/* ============ UI ============ */
 let selected=null;
-function setStatus(m){ document.getElementById('status').textContent = m||''; }
-function escapeHtml(s){ return (s||'').replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
-function getNb(){ const s=loadStore(); return selected? s.notebooks[selected]:null; }
-
+function setStatus(m){document.getElementById('status').textContent=m||'';}
+function escapeHtml(s){return(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
+function refreshSelects(){
+  const nb=getNb();if(!nb)return;
+  const srcOpts=nb.sources.map(s=>`<option value="${s.cid}">${escapeHtml(s.title)}</option>`).join('');
+  const noteOpts=nb.notes.map(s=>`<option value="${s.cid}">${escapeHtml(s.title)}</option>`).join('');
+  document.getElementById('lnSrc').innerHTML=srcOpts+noteOpts;
+  document.getElementById('lnTgt').innerHTML=srcOpts+noteOpts;
+}
 function loadNbs(){
-  const s=loadStore(); const list=Object.values(s.notebooks);
-  const el=document.getElementById('nbList'); el.innerHTML='';
-  if(!list.length){ el.innerHTML='<div class="muted">ยังไม่มีสมุดบันทึก</div>'; }
-  list.forEach(nb=>{
-    const d=document.createElement('div');
-    d.className='nb'+(nb.id===selected?' sel':'');
+  const s=loadStore(),list=Object.values(s.notebooks),el=document.getElementById('nbList');el.innerHTML='';
+  if(!list.length){el.innerHTML='<div class="muted">ยังไม่มีพื้นที่ความรู้</div>';}
+  list.forEach(nb=>{const d=document.createElement('div');d.className='nb'+(nb.id===selected?' sel':'');
     d.innerHTML=`<span class="serif">${escapeHtml(nb.title)}</span><small>${nb.id}</small>`;
-    d.onclick=()=>{ selected=nb.id; document.getElementById('workCard').style.display='block'; loadNbs(); };
-    el.appendChild(d);
-  });
+    d.onclick=()=>{selected=nb.id;document.getElementById('workCard').style.display='block';loadNbs();refreshSelects();renderLinks();};
+    el.appendChild(d);});
 }
-
-function createNb(){
-  const t=document.getElementById('nbTitle').value.trim();
-  if(!t) return setStatus('กรุณาใส่ชื่อสมุด');
-  const s=loadStore(); const id=uid();
-  s.notebooks[id]={id,title:t,created:new Date().toISOString(),sources:[],notes:[]};
-  saveStore(s); selected=id;
-  document.getElementById('nbTitle').value='';
-  document.getElementById('workCard').style.display='block';
-  setStatus('สร้างแล้ว '+id); loadNbs();
-}
-
+function createNb(){const t=document.getElementById('nbTitle').value.trim();if(!t)return setStatus('กรุณาใส่ชื่อ');
+  const s=loadStore(),id=uid();s.notebooks[id]={id,title:t,created:new Date().toISOString(),sources:[],notes:[],links:[]};
+  saveStore(s);selected=id;document.getElementById('nbTitle').value='';document.getElementById('workCard').style.display='block';
+  setStatus('สร้างแล้ว '+id);loadNbs();refreshSelects();}
 async function addSource(){
-  if(!selected) return setStatus('เลือกสมุดก่อน');
-  const type=document.getElementById('srcType').value;
-  const title=document.getElementById('srcTitle').value.trim()||'ไม่ระบุชื่อ';
-  let body="";
-  if(type==='file'){
-    const f=document.getElementById('srcFile').files[0];
-    if(!f) return setStatus('เลือกไฟล์ก่อน');
-    body=await f.text();
-  } else {
-    body=document.getElementById('srcBody').value.trim();
-  }
-  if(!body) return setStatus('กรุณาใส่เนื้อหา/URL/ไฟล์');
-  const s=loadStore(); const nb=s.notebooks[selected];
-  nb.sources.push({id:uid(),title,kind:type,uri:"",created:new Date().toISOString(),content:body,chunks:chunkText(body)});
-  saveStore(s); document.getElementById('srcBody').value=''; document.getElementById('srcFile').value='';
-  setStatus('เพิ่มแหล่งข้อมูลแล้ว ('+nb.sources.length+' แหล่ง)');
-}
-
-function ask(){
-  if(!selected) return setStatus('เลือกสมุดก่อน');
-  const q=document.getElementById('askQ').value.trim();
-  if(!q) return setStatus('กรุณาใส่คำค้นหา');
-  const nb=getNb(); const hits=retrieve(nb,q,5);
+  if(!selected)return setStatus('เลือกพื้นที่ก่อน');
+  const type=document.getElementById('srcType').value,title=document.getElementById('srcTitle').value.trim()||'ไม่ระบุชื่อ';
+  let body="";if(type==='file'){const f=document.getElementById('srcFile').files[0];if(!f)return setStatus('เลือกไฟล์');body=await f.text();}
+  else body=document.getElementById('srcBody').value.trim();
+  if(!body)return setStatus('กรุณาใส่เนื้อหา');
+  const s=loadStore(),nb=s.notebooks[selected];
+  nb.sources.push({id:uid(),cid:uid(),title,kind:type,uri:"",created:new Date().toISOString(),content:body,chunks:chunkText(body)});
+  saveStore(s);document.getElementById('srcBody').value='';document.getElementById('srcFile').value='';refreshSelects();renderLinks();
+  setStatus('เพิ่มแหล่งข้อมูลแล้ว ('+nb.sources.length+' แหล่ง)');}
+function addLink(){if(!selected)return setStatus('เลือกพื้นที่ก่อน');
+  const src=document.getElementById('lnSrc').value,tgt=document.getElementById('lnTgt').value,rel=document.getElementById('lnRel').value;
+  if(!src||!tgt||src===tgt)return setStatus('เลือกสองรายการต่างกัน');
+  const s=loadStore(),nb=s.notebooks[selected];nb.links.push({id:uid(),source:src,relation:rel,target:tgt,created:new Date().toISOString()});
+  saveStore(s);renderLinks();setStatus('เชื่อมโยงแล้ว');}
+function renderLinks(){const nb=getNb();const el=document.getElementById('linkList');if(!nb||!nb.links.length){el.innerHTML='<span class="muted">ยังไม่มีความเชื่อมโยง</span>';return;}
+  const nm=cid=>{const x=nb.sources.find(s=>s.cid===cid)||nb.notes.find(n=>n.cid===cid);return x?x.title:cid;};
+  el.innerHTML=nb.links.map(l=>`<div>• ${escapeHtml(nm(l.source))} —<b>${l.relation}</b>→ ${escapeHtml(nm(l.target))}</div>`).join('');}
+function ask(){if(!selected)return setStatus('เลือกพื้นที่ก่อน');
+  const q=document.getElementById('askQ').value.trim();if(!q)return setStatus('กรุณาใส่คำค้นหา');
+  const nb=getNb();const hits=retrieve(nb,q,5);const linked=expand(nb,hits);
   let html='<h4 class="serif"> passages ที่อ้างอิงได้</h4>';
-  if(!hits.length) html+='<div class="muted">ไม่พบ</div>';
-  hits.forEach(h=>{ html+=`<div class="nb"><b>[${escapeHtml(h.source)}]</b> <span class="muted">คะแนน ${h.score.toFixed(2)}</span><div style="flex-basis:100%">${escapeHtml(h.text)}</div></div>`; });
-  document.getElementById('result').innerHTML=html;
-}
+  if(!hits.length)html+='<div class="muted">ไม่พบ</div>';
+  hits.forEach(h=>{html+=`<div class="nb"><b>[${escapeHtml(h.source)}]</b> <span class="muted">คะแนน ${h.score.toFixed(2)}</span><div style="flex-basis:100%">${escapeHtml(h.text)}</div></div>`;});
+  if(linked.length){html+='<h4 class="serif" style="margin-top:16px">ขยายผ่านความเชื่อมโยง</h4>';
+    linked.forEach(l=>{html+=`<div class="nb"><span class="muted">${l.relation}</span> <b>${escapeHtml(l.node.title)}</b><div style="flex-basis:100%">${escapeHtml((l.node.content||'').slice(0,160))}...</div></div>`;});}
+  document.getElementById('result').innerHTML=html;}
+function generate(){if(!selected)return setStatus('เลือกพื้นที่ก่อน');
+  const kind=document.getElementById('genKind').value,nb=getNb();let out,label=kind;
+  if(kind==='datatable')out=buildDataTable(nb);
+  else if(kind==='citation')out=buildCitation(nb);
+  else if(kind==='mindmap')out=JSON.stringify(buildMindmap(nb),null,2);
+  else if(kind==='grounded_prompt'){
+    const q=document.getElementById('genQ').value.trim()||'สรุป';
+    const hits=retrieve(nb,q,5).map(h=>`[${h.source}] ${h.text}`).join("\n\n");
+    out=`# NimNote prompt (grounded)\n\nSystem: คุณคือผู้ช่วยวิจัย ตอบโดยใช้เฉพาะแหล่งที่ให้ และอ้างอิงด้วย [ชื่อแหล่ง]\n\n## โจทย์: ${q}\n\n## แหล่งที่อ้างอิงได้:\n${hits||'(ไม่มี)'}\n\nผลิตคำตอบเดี๋ยวนี้`;
+  }
+  document.getElementById('result').innerHTML=`<h4 class="serif">${label}</h4><pre>${escapeHtml(out)}</pre>`;}
 
-function generate(){
-  if(!selected) return setStatus('เลือกสมุดก่อน');
-  const kind=document.getElementById('genKind').value;
-  const nb=getNb();
-  let out, label=kind;
-  if(kind==='datatable'){ out=buildDataTable(nb); }
-  else if(kind==='citation'){ out=buildCitation(nb); }
-  else if(kind==='mindmap'){ out=JSON.stringify(buildMindmap(nb),null,2); }
-  else { out="(ต้องใช้ LLM) หน้านี้รองรับออฟไลน์: datatable / citation / mindmap เท่านั้น"; }
-  document.getElementById('result').innerHTML=`<h4 class="serif">${label}</h4><pre>${escapeHtml(out)}</pre>`;
-}
-
-// show/hide file picker
-document.getElementById('srcType').addEventListener('change', e=>{
-  document.getElementById('srcFile').style.display = e.target.value==='file' ? 'block' : 'none';
-  document.getElementById('srcBody').style.display = e.target.value==='file' ? 'none' : 'block';
-});
-
+document.getElementById('srcType').addEventListener('change',e=>{
+  document.getElementById('srcFile').style.display=e.target.value==='file'?'block':'none';
+  document.getElementById('srcBody').style.display=e.target.value==='file'?'none':'block';});
 loadNbs();
 </script>
 </body>
