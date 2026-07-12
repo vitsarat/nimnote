@@ -3,9 +3,9 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>nimnote — สมุดความรู้ไทย แบบเชื่อมโยง</title>
+<title>nimnote — รู้ก่อนขาย รู้ก่อนรับซื้อ</title>
 <style>
-  :root{--bg:#F4F1EA;--ink:#16140F;--accent:#D6452B;--line:#16140F22;--mut:#16140F99}
+  :root{--bg:#F4F1EA;--ink:#16140F;--accent:#D6452B;--line:#16140F22;--mut:#16140F99;--ok:#1a7f37}
   *{box-sizing:border-box}
   body{margin:0;font-family:ui-sans-serif,system-ui,"Inter","Sarabun",sans-serif;background:var(--bg);color:var(--ink);line-height:1.6}
   .serif{font-family:Georgia,"Times New Roman",serif}
@@ -14,157 +14,122 @@
   h1 .dot{color:var(--accent)}
   .tag{font-size:13px;color:var(--mut);margin-top:4px}
   .pill{display:inline-block;font-size:11px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--mut);margin-left:6px}
-  main{max-width:880px;margin:0 auto;padding:20px 26px 80px}
+  main{max-width:900px;margin:0 auto;padding:20px 26px 80px}
   .card{border:1px solid var(--line);border-radius:10px;padding:16px;margin:14px 0;background:#fff}
   label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:0 0 6px}
   input,textarea,select{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}
-  textarea{min-height:64px;resize:vertical}
   .row{display:flex;gap:10px;flex-wrap:wrap}
   .row>*{flex:1;min-width:140px}
   button{font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:7px;padding:9px 14px;background:var(--ink);color:var(--bg)}
   button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
   button:hover{opacity:.88}
-  .nb{display:flex;gap:10px;align-items:center;padding:9px 12px;border:1px solid var(--line);border-radius:8px;margin:7px 0;cursor:pointer}
-  .nb.sel{outline:2px solid var(--accent);outline-offset:-2px}
-  .nb small{color:var(--mut);margin-left:auto}
-  pre{background:#16140F;color:#F4F1EA;padding:14px;border-radius:8px;overflow:auto;max-height:340px;font-size:12.5px;white-space:pre-wrap;word-break:break-word}
+  pre{background:#16140F;color:#F4F1EA;padding:14px;border-radius:8px;overflow:auto;max-height:360px;font-size:12.5px;white-space:pre-wrap;word-break:break-word}
   .muted{color:var(--mut);font-size:13px}
   .res{margin-top:12px}
   #status{font-size:13px;color:var(--accent);min-height:18px}
-  .axis{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin:10px 0}
-  @media(max-width:680px){.axis{grid-template-columns:1fr}}
-  .axis div{border:1px solid var(--line);border-radius:8px;padding:12px;background:#fff8}
-  .axis b{color:var(--accent)}
-  .linkrow{display:flex;gap:8px;align-items:center;margin:6px 0;flex-wrap:wrap}
-  .rel-support{color:#1a7f37}.rel-contradicts{color:var(--accent)}.rel-related{color:#1a5fb4}.rel-derived{color:#7a4fb4}
+  .grade{border-left:3px solid var(--accent);padding:8px 12px;margin:8px 0;background:#fff8;border-radius:0 8px 8px 0}
+  .grade b{color:var(--accent)}
+  .rel-support{color:var(--ok)}.rel-contradicts{color:var(--accent)}.rel-related{color:#1a5fb4}.rel-derived{color:#7a4fb4}
+  table{width:100%;border-collapse:collapse;font-size:13px;margin-top:6px}
+  th,td{border:1px solid var(--line);padding:6px 8px;text-align:left}
+  th{background:#16140F0a}
 </style>
 </head>
 <body>
 <header>
   <h1 class="serif">nimnote<span class="dot">.</span></h1>
-  <div class="tag">สมุดความรู้ไทย แบบเชื่อมโยงมีประเภท — ฟรี ส่วนตัว ไม่ต้องตั้งค่า <span class="pill">พิมพ์เลย</span></div>
+  <div class="tag">ฐานความรู้ "ของชิ้นนี้ ข้างในมีอะไร" — รู้ก่อนขาย รู้ก่อนรับซื้อ <span class="pill">เกรดของเก่า</span></div>
 </header>
 
 <main>
-  <div class="axis">
-    <div><b>① พิมพ์เลย</b><br><span class="muted">เปิดมาพิมพ์ได้ทันที ไม่มี onboarding ยุ่ย</span></div>
-    <div><b>② เชื่อมโยงมีประเภท</b><br><span class="muted">สนับสนุน / ขัดแย้ง / สืบเนื่อง → ขยายบริบท</span></div>
-    <div><b>③ ของคุณ 100%</b><br><span class="muted">เก็บในเครื่อง ฟรี ไม่ขึ้นคลาวด์</span></div>
-  </div>
-
   <div id="status"></div>
 
   <div class="card">
+    <h3 class="serif" style="margin-top:0">ค้นหาของเก่า (พิมพ์ชื่อสินค้า/ชนิด)</h3>
     <div class="row">
-      <div style="flex:3"><label>ชื่องาน (ไม่บังคับ)</label><input id="nbTitle" placeholder="เช่น เกรดโลหะ PCB"></div>
-      <div style="flex:1;display:flex;align-items:flex-end"><button onclick="createNb()">+ เริ่ม</button></div>
+      <div style="flex:4"><input id="askQ" placeholder="เช่น PCB โทรศัพท์, เครื่องซักผ้า, สายไฟ, iPhone12"></div>
+      <div style="flex:1"><button onclick="ask()">ดูเกรด</button></div>
     </div>
-    <div id="nbList" style="margin-top:10px"></div>
-    <div style="margin-top:6px"><button class="ghost" onclick="loadSample()">หรือโหลดตัวอย่าง: เกรดโลหะ PCB (เพื่อดูคุณค่า)</button></div>
+    <div class="muted" style="margin-top:6px">หรือโหลดฐานความรู้ตัวอย่าง (เกรด PCB / เครื่องใช้ไฟฟ้า) เพื่อดูคุณค่า</div>
+    <div style="margin-top:8px"><button class="ghost" onclick="loadSample()">โหลดฐานความรู้ตัวอย่าง</button></div>
+    <div class="res" id="result"></div>
   </div>
 
-  <div class="card" id="workCard" style="display:none">
-    <h3 class="serif" style="margin-top:0">① เพิ่มบันทึก / แหล่งข้อมูล</h3>
+  <div class="card">
+    <h3 class="serif" style="margin-top:0">เพิ่ม/แก้ เกรดของเก่าเอง</h3>
     <div class="row">
-      <div><label>ชื่อ</label><input id="srcTitle" placeholder="เช่น รายงานทองคำ PCB"></div>
-      <div><label>ประเภท</label>
-        <select id="srcType"><option value="text">ข้อความ</option><option value="file">ไฟล์</option></select>
-      </div>
+      <div style="flex:2"><label>ชื่อของ</label><input id="itName" placeholder="เช่น PCB โทรศัพท์มือถือ"></div>
+      <div style="flex:1"><label>หมวด</label><input id="itCat" placeholder="เช่น PCB"></div>
     </div>
-    <label style="margin-top:10px">เนื้อหา / เลือกไฟล์</label>
-    <textarea id="srcBody" placeholder="ทองคำ recovered จาก PCB โทรศัพท์มือถือที่ 200-300 กรัมต่อตัน..."></textarea>
-    <input type="file" id="srcFile" style="margin-top:8px;display:none">
-    <div style="margin-top:10px"><button onclick="addSource()">เพิ่ม</button></div>
+    <label style="margin-top:10px">องค์ประกอบโลหะ (ชื่อ:กรัมต่อตัน หรือ %)</label>
+    <textarea id="itComp" placeholder="ทองคำ:350 g/t&#10;เงิน:2640 ppm&#10;ทองแดง:13%&#10;พาลาเดียม:119 ppm"></textarea>
+    <label style="margin-top:10px">ราคาอ้างอิง / หมายเหตุ</label>
+    <textarea id="itNote" placeholder="อ้างอิง: Sahan 2019, EPA 2018"></textarea>
+    <div style="margin-top:10px"><button onclick="addItem()">เพิ่มลงฐานความรู้</button></div>
+  </div>
 
-    <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
-    <h3 class="serif" style="margin-top:0">② เชื่อมโยงความจำ (มีประเภท)</h3>
-    <div class="linkrow">
+  <div class="card">
+    <h3 class="serif" style="margin-top:0">ความเชื่อมโยง (linked memory)</h3>
+    <div class="linkrow row">
       <select id="lnSrc" style="flex:2"></select>
       <select id="lnRel" style="flex:1">
-        <option value="support" class="rel-support">สนับสนุน</option>
-        <option value="contradict" class="rel-contradicts">ขัดแย้ง</option>
-        <option value="related" class="rel-related">เกี่ยวข้อง</option>
-        <option value="derived" class="rel-derived">สืบเนื่องจาก</option>
+        <option value="support">สนับสนุน</option>
+        <option value="contradict">ขัดแย้ง</option>
+        <option value="related">เกี่ยวข้อง</option>
+        <option value="derived">สืบเนื่องจาก</option>
       </select>
       <select id="lnTgt" style="flex:2"></select>
       <button onclick="addLink()">เชื่อมโยง</button>
     </div>
     <div id="linkList" class="muted" style="margin-top:8px"></div>
-
-    <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
-    <h3 class="serif" style="margin-top:0">ค้นหา (ตัดคำไทยเกรด PyThaiNLP) + ขยายผ่านความเชื่อมโยง</h3>
-    <div class="row">
-      <div style="flex:4"><input id="askQ" placeholder="เช่น ทองคำ"></div>
-      <div style="flex:1"><button onclick="ask()">ค้นหา</button></div>
-    </div>
-
-    <hr style="border:none;border-top:1px solid var(--line);margin:20px 0">
-    <h3 class="serif" style="margin-top:0">③ สร้างชุดให้ AI / ส่งออก</h3>
-    <div class="row">
-      <div style="flex:2">
-        <select id="genKind">
-          <option value="grounded_prompt">Prompt พร้อมอ้างอิง (สำหรับ LLM)</option>
-          <option value="datatable">ตารางข้อมูล (CSV)</option>
-          <option value="citation">ดัชนีอ้างอิง (MD)</option>
-          <option value="mindmap">แผนที่ความคิด (JSON)</option>
-        </select>
-      </div>
-      <div style="flex:2"><input id="genQ" placeholder="คำถาม/โจทย์ (ถ้ามี)"></div>
-      <div style="flex:1"><button onclick="generate()">สร้าง</button></div>
-    </div>
-    <div class="res" id="result"></div>
   </div>
 </main>
 
 <script>
-/* ===== nimnote core: PyThaiNLP-grade tokenizer (longest-match dict + bigram fallback) ===== */
-const THAI_DICT=new Set(("และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็ ทองคำ โลหะ มีค่า แผงวงจร วงจร โทรศัพท์ มือถือ รีไฟน์ กู้คืน กระบวนการ ขยะ อิเล็กทรอนิกส์ เครื่องจักร สกัด ถลุง แร่ หน้าตัก ตัน กรัม ความรู้ สมุด บันทึก เอกสาร งานวิจัย ฐานราก ชั้น เชื่อมโยง ประเภท คอปเปอร์ ทองแดง เงิน แพลทินัม พาลาเดียม ดีบุก ตะกั่ว สูงสุด ปริมาณ ร้อยละ อัตรา ผลิตภัณฑ์ มูลค่า เศรษฐกิจ").split(" "));
+/* ===== nimnote: ฐานความรู้เกรดของเก่า (local, Thai tokenizer) ===== */
+const THAI_DICT=new Set(("และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็ ทองคำ ทองแดง เงิน พาลาเดียม ดีบุก ตะกั่ว ทองแดง โลหะ มีค่า แผงวงจร วงจร โทรศัพท์ มือถือ รีไฟน์ กู้คืน กระบวนการ ขยะ อิเล็กทรอนิกส์ เครื่องจักร สกัด ถลุง แร่ หน้าตัก ตัน กรัม ความรู้ สมุด บันทึก เอกสาร งานวิจัย ฐานราก ชั้น เชื่อมโยง ประเภท คอปเปอร์ ทองแดง แพลทินัม ปริมาณ ร้อยละ อัตรา ผลิตภัณฑ์ มูลค่า เศรษฐกิจ เครื่องซักผ้า ตู้เย็น สายไฟ คอมเพรสเซอร์ มอเตอร์ เหล็ก ทองคำ เกรด ของเก่า รับซื้อ").split(" "));
 const isThai=ch=>{const c=ch.codePointAt(0);return c>=0x0E00&&c<=0x0E7F;};
-function segmentThai(run){const out=[];let i=0;while(i<run.length){let matched="",j=i+1;while(j<=run.length){const cand=run.slice(i,j);if(THAI_DICT.has(cand)&&cand.length>matched.length)matched=cand;j++;}if(matched){out.push(matched);i+=matched.length;}else{if(i+1<run.length)out.push(run.slice(i,i+2));else out.push(run.slice(i,i+1));i++;}}return out;}
-function tokenize(text){const lower=(text||"").toLowerCase();const out=[];let buf="",bufThai=false;const flush=()=>{if(!buf)return;if(bufThai)out.push(...segmentThai(buf));else{for(const w of buf.match(/[a-z0-9]+/g)||[])if(w.length>1)out.push(w);}buf="";};for(const ch of lower){const t=isThai(ch);if((t&&!bufThai)||(!t&&bufThai)){flush();bufThai=t;}if(t||/[a-z0-9]/.test(ch))buf+=ch;else flush();}flush();return out;}
+function segmentThai(run){const out=[];let i=0;while(i<run.length){let m="",j=i+1;while(j<=run.length){const cand=run.slice(i,j);if(THAI_DICT.has(cand)&&cand.length>m.length)m=cand;j++;}if(m){out.push(m);i+=m.length;}else{if(i+1<run.length)out.push(run.slice(i,i+2));else out.push(run.slice(i,i+1));i++;}}return out;}
+function tokenize(text){const lower=(text||"").toLowerCase();const out=[];let buf="",bt=false;const flush=()=>{if(!buf)return;if(bt)out.push(...segmentThai(buf));else for(const w of buf.match(/[a-z0-9]+/g)||[])if(w.length>1)out.push(w);buf="";};for(const ch of lower){const t=isThai(ch);if((t&&!bt)||(!t&&bt)){flush();bt=t;}if(t||/[a-z0-9]/.test(ch))buf+=ch;else flush();}flush();return out;}
 const STOP=new Set(("the a an and or of to in on for with is are be this that it as at by from we you they he she but if then so their our your his her them us not no can will would could should may might must do does did has have had was were been being ของ และ ใน ที่ ไป จาก กับ ให้ ไม่ ได้ จะ ถ้า แต่ เพราะ ว่า ซึ่ง นี้ นั้น เรา คุณ เขา เธอ ก็").split(" "));
 function terms(text){return tokenize(text).filter(t=>!STOP.has(t));}
-function chunkText(text){text=(text||"").trim();if(!text)return[];const ch=[];let s=0,i=0;while(s<text.length){let e=Math.min(s+900,text.length);ch.push({cid:Math.random().toString(36).slice(2,10),idx:i++,text:text.slice(s,e)});if(e===text.length)break;s=e-120;}return ch;}
+const STORE_KEY="nimnote_grade_v1";
+function load(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{items:[],links:[]};}catch(e){return{items:[],links:[]};}}
+function save(s){localStorage.setItem(STORE_KEY,JSON.stringify(s));}
 function uid(){return Math.random().toString(36).slice(2,14);}
-const STORE_KEY="nimnote_store_v3";
-function loadStore(){try{return JSON.parse(localStorage.getItem(STORE_KEY))||{notebooks:{}};}catch(e){return{notebooks:{}};}}
-function saveStore(s){localStorage.setItem(STORE_KEY,JSON.stringify(s));}
-function getNb(){const s=loadStore();return selected?s.notebooks[selected]:null;}
-function retrieve(nb,query,topK=5){const chunks=[];for(const s of(nb.sources||[]))for(const c of(s.chunks||[]))chunks.push([s,c]);if(!chunks.length)return[];const n=chunks.length,df={};for(const[_,c]of chunks)for(const t of new Set(tokenize(c.text)))df[t]=(df[t]||0)+1;const qterms=tokenize(query),scored=[];for(const[s,c]of chunks){const tf={};for(const t of tokenize(c.text))tf[t]=(tf[t]||0)+1;let sc=0;for(const qt of qterms){if(qt in tf){const idf=Math.log((n+1)/(df[qt]+1))+1;sc+=tf[qt]*idf;}}if(sc>0)scored.push([sc,s,c]);}scored.sort((a,b)=>b[0]-a[0]);return scored.slice(0,topK).map(([sc,s,c])=>({source:s.title,cid:c.cid,score:sc,text:c.text}));}
-function expand(nb,seeds){const out=[];const seen=new Set(seeds.map(s=>s.source||s.cid));for(const seed of seeds)for(const l of(nb.links||[])){let other=null;if(l.source===seed.cid)other=l.target;else if(l.target===seed.cid)other=l.source;if(other&&!seen.has(other)){seen.add(other);const node=nb.sources.find(x=>x.cid===other)||nb.notes.find(x=>x.cid===other);if(node)out.push({relation:l.relation,node});}}return out;}
-function buildDataTable(nb){const rows=[],glob={};for(const s of(nb.sources||[])){const toks=terms(s.content||"");for(const t of toks)glob[t]=(glob[t]||0)+1;rows.push({id:s.id,title:s.title,kind:s.kind,chars:(s.content||"").length,chunks:(s.chunks||[]).length,top_terms:[...new Set(toks)].slice(0,5).join(", ")});}let o="id,title,kind,chars,chunks,top_terms\n";for(const r of rows)o+=`${r.id},"${r.title}",${r.kind},${r.chars},${r.chunks},"${r.top_terms}"\n`;o+="\n# Global top terms\n";for(const[t,c]of Object.entries(glob).sort((a,b)=>b[1]-a[1]).slice(0,20))o+=`${t},${c}\n`;return o;}
-function buildCitation(nb){let o="# ดัชนีการอ้างอิง\n\n";for(const s of(nb.sources||[])){o+=`## [${s.id}] ${s.title} (${s.kind})\n`;for(const c of(s.chunks||[]))o+=`- ${c.cid}: ${c.text.slice(0,160).replace(/\n/g," ")}...\n`;}return o;}
-function buildMindmap(nb){const t={space:nb.title,sources:[]};for(const s of(nb.sources||[]))t.sources.push({id:s.id,title:s.title,terms:[...new Set(terms(s.content||""))].slice(0,8)});return t;}
+function retrieve(q,topK=5){const s=load();const items=s.items;if(!items.length)return[];const n=items.length,df={};for(const it of items)for(const t of new Set(terms(it.name+" "+(it.cat||""))))df[t]=(df[t]||0)+1;const qterms=terms(q),scored=[];for(const it of items){const tf={};for(const t of terms(it.name+" "+(it.cat||"")))tf[t]=(tf[t]||0)+1;let sc=0;for(const qt of qterms)if(qt in tf){const idf=Math.log((n+1)/(df[qt]+1))+1;sc+=tf[qt]*idf;}if(sc>0)scored.push([sc,it]);}scored.sort((a,b)=>b[0]-a[0]);return scored.slice(0,topK).map(([sc,it])=>it);}
+function expand(item){const s=load();const out=[];for(const l of s.links){let other=null;if(l.source===item.id)other=l.target;else if(l.target===item.id)other=l.source;if(other){const node=s.items.find(x=>x.id===other);if(node)out.push({relation:l.relation,node});}}return out;}
+const REL={support:"สนับสนุน",contradict:"ขัดแย้ง",related:"เกี่ยวข้อง",derived:"สืบเนื่องจาก"};
 
-/* ===== UI ===== */
-let selected=null;
-const REL_TXT={support:"สนับสนุน",contradict:"ขัดแย้ง",related:"เกี่ยวข้อง",derived:"สืบเนื่องจาก"};
+function ask(){const q=document.getElementById('askQ').value.trim();if(!q)return setStatus('พิมพ์ชื่อของเก่า');const hits=retrieve(q,5);let html='';if(!hits.length)html='<div class="muted">ไม่พบในฐานความรู้ — ลองเพิ่มเองด้านล่าง</div>';hits.forEach(it=>{html+=`<div class="grade"><b>${escapeHtml(it.name)}</b> <span class="muted">(${escapeHtml(it.cat||'')})</span><div style="white-space:pre-wrap;margin-top:4px">${escapeHtml(it.comp||'')}</div>${it.note?`<div class="muted" style="margin-top:4px">📌 ${escapeHtml(it.note)}</div>`:''}</div>`;const linked=expand(it);if(linked.length){html+=`<div class="muted" style="margin-top:6px">เชื่อมโยง: `+linked.map(l=>`<b class="rel-${l.relation}">${REL[l.relation]}</b> → ${escapeHtml(l.node.name)}`).join(' | ')+`</div>`;}});document.getElementById('result').innerHTML=html;}
+
+function addItem(){const name=document.getElementById('itName').value.trim();if(!name)return setStatus('ใส่ชื่อของ');const comp=document.getElementById('itComp').value.trim();const note=document.getElementById('itNote').value.trim();const cat=document.getElementById('itCat').value.trim();const s=load();s.items.push({id:uid(),name,cat,comp,note});save(s);document.getElementById('itName').value='';document.getElementById('itComp').value='';document.getElementById('itNote').value='';document.getElementById('itCat').value='';refreshSelects();setStatus('เพิ่ม "'+name+'" แล้ว ('+s.items.length+' รายการ)');}
+
+function refreshSelects(){const s=load();const opt=s.items.map(x=>`<option value="${x.id}">${escapeHtml(x.name)}</option>`).join('');document.getElementById('lnSrc').innerHTML=opt;document.getElementById('lnTgt').innerHTML=opt;}
+function addLink(){const src=document.getElementById('lnSrc').value,tgt=document.getElementById('lnTgt').value,rel=document.getElementById('lnRel').value;if(!src||!tgt||src===tgt)return setStatus('เลือกสองรายการต่างกัน');const s=load();s.links.push({id:uid(),source:src,relation:rel,target:tgt});save(s);renderLinks();setStatus('เชื่อมโยงแล้ว');}
+function renderLinks(){const s=load();const el=document.getElementById('linkList');if(!s.links.length){el.innerHTML='<span class="muted">ยังไม่มีความเชื่อมโยง</span>';return;}const nm=id=>{const x=s.items.find(i=>i.id===id);return x?x.name:id;};el.innerHTML=s.links.map(l=>`<div>• ${escapeHtml(nm(l.source))} —<b class="rel-${l.relation}"> ${REL[l.relation]} </b>→ ${escapeHtml(nm(l.target))}</div>`).join('');}
+
 function setStatus(m){document.getElementById('status').textContent=m||'';}
 function escapeHtml(s){return(s||'').replace(/[&<>]/g,c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c]));}
-function refreshSelects(){const nb=getNb();if(!nb)return;const opt=items=>items.map(x=>`<option value="${x.cid}">${escapeHtml(x.title)}</option>`).join('');document.getElementById('lnSrc').innerHTML=opt(nb.sources);document.getElementById('lnTgt').innerHTML=opt(nb.sources);}
-function loadNbs(){const s=loadStore(),list=Object.values(s.notebooks),el=document.getElementById('nbList');el.innerHTML='';if(!list.length){el.innerHTML='<div class="muted">ยังไม่มีงาน</div>';}list.forEach(nb=>{const d=document.createElement('div');d.className='nb'+(nb.id===selected?' sel':'');d.innerHTML=`<span class="serif">${escapeHtml(nb.title)}</span><small>${nb.id}</small>`;d.onclick=()=>{selected=nb.id;document.getElementById('workCard').style.display='block';loadNbs();refreshSelects();renderLinks();};el.appendChild(d);});}
-function createNb(){const t=document.getElementById('nbTitle').value.trim()||'งานที่'+new Date().toLocaleDateString('th');const s=loadStore(),id=uid();s.notebooks[id]={id,title:t,created:new Date().toISOString(),sources:[],notes:[],links:[]};saveStore(s);selected=id;document.getElementById('nbTitle').value='';document.getElementById('workCard').style.display='block';setStatus('เริ่มแล้ว '+id);loadNbs();refreshSelects();}
-async function addSource(){if(!selected)return setStatus('เริ่มงานก่อน');const type=document.getElementById('srcType').value,title=document.getElementById('srcTitle').value.trim()||'ไม่ระบุชื่อ';let body="";if(type==='file'){const f=document.getElementById('srcFile').files[0];if(!f)return setStatus('เลือกไฟล์');body=await f.text();}else body=document.getElementById('srcBody').value.trim();if(!body)return setStatus('กรุณาใส่เนื้อหา');const s=loadStore(),nb=s.notebooks[selected];nb.sources.push({id:uid(),cid:uid(),title,kind:type,created:new Date().toISOString(),content:body,chunks:chunkText(body)});saveStore(s);document.getElementById('srcBody').value='';document.getElementById('srcFile').value='';refreshSelects();renderLinks();setStatus('เพิ่มแล้ว ('+nb.sources.length+' รายการ)');}
-function addLink(){if(!selected)return setStatus('เริ่มงานก่อน');const src=document.getElementById('lnSrc').value,tgt=document.getElementById('lnTgt').value,rel=document.getElementById('lnRel').value;if(!src||!tgt||src===tgt)return setStatus('เลือกสองรายการต่างกัน');const s=loadStore(),nb=s.notebooks[selected];nb.links.push({id:uid(),source:src,relation:rel,target:tgt,created:new Date().toISOString()});saveStore(s);renderLinks();setStatus('เชื่อมโยงแล้ว');}
-function renderLinks(){const nb=getNb();const el=document.getElementById('linkList');if(!nb||!nb.links.length){el.innerHTML='<span class="muted">ยังไม่มีความเชื่อมโยง</span>';return;}const nm=cid=>{const x=nb.sources.find(s=>s.cid===cid)||nb.notes.find(n=>n.cid===cid);return x?x.title:cid;};el.innerHTML=nb.links.map(l=>`<div>• ${escapeHtml(nm(l.source))} —<b class="rel-${l.relation}"> ${REL_TXT[l.relation]} </b>→ ${escapeHtml(nm(l.target))}</div>`).join('');}
-function ask(){if(!selected)return setStatus('เริ่มงานก่อน');const q=document.getElementById('askQ').value.trim();if(!q)return setStatus('กรุณาใส่คำค้นหา');const nb=getNb();const hits=retrieve(nb,q,5);const linked=expand(nb,hits);let html='<h4 class="serif">เนื้อหาที่อ้างอิงได้</h4>';if(!hits.length)html+='<div class="muted">ไม่พบ</div>';hits.forEach(h=>{html+=`<div class="nb"><b>[${escapeHtml(h.source)}]</b> <span class="muted">คะแนน ${h.score.toFixed(2)}</span><div style="flex-basis:100%">${escapeHtml(h.text)}</div></div>`;});if(linked.length){html+='<h4 class="serif" style="margin-top:16px">ขยายผ่านความเชื่อมโยง</h4>';linked.forEach(l=>{html+=`<div class="nb"><span class="muted rel-${l.relation}">${REL_TXT[l.relation]}</span> <b>${escapeHtml(l.node.title)}</b><div style="flex-basis:100%">${escapeHtml((l.node.content||'').slice(0,160))}...</div></div>`;});}document.getElementById('result').innerHTML=html;}
-function generate(){if(!selected)return setStatus('เริ่มงานก่อน');const kind=document.getElementById('genKind').value,nb=getNb();let out,label=kind;if(kind==='datatable')out=buildDataTable(nb);else if(kind==='citation')out=buildCitation(nb);else if(kind==='mindmap')out=JSON.stringify(buildMindmap(nb),null,2);else if(kind==='grounded_prompt'){const q=document.getElementById('genQ').value.trim()||'สรุป';const hits=retrieve(nb,q,5).map(h=>`[${h.source}] ${h.text}`).join("\n\n");out=`# NimNote prompt (grounded)\n\nSystem: คุณคือผู้ช่วยวิจัย ตอบโดยใช้เฉพาะแหล่งที่ให้ และอ้างอิงด้วย [ชื่อแหล่ง]\n\n## โจทย์: ${q}\n\n## แหล่งที่อ้างอิงได้:\n${hits||'(ไม่มี)'}\n\nผลิตคำตอบเดี๋ยวนี้`;}document.getElementById('result').innerHTML=`<h4 class="serif">${label}</h4><pre>${escapeHtml(out)}</pre>`;}
 
 function loadSample(){
-  const s=loadStore(),id=uid();
-  const srcs=[
-    {title:"รายงานทองคำ PCB",content:"ทองคำ recovered จาก PCB โทรศัพท์มือถือที่ 200-300 กรัมต่อตัน ถือเป็นโลหะมีค่าสูงสุดในแผงวงจร"},
-    {title:"ข้อมูล USGS",content:"USGS ระบุว่าการรีไฟน์ 1 ตันขยะอิเล็กทรอนิกส์ได้ทองคำประมาณ 1 ออนซ์ต่อ 3 ตัน (ประมาณ 10.4 กรัมต่อตัน)"},
-    {title:"โรงงานรีไฟน์",content:"โรงงานรับรีไฟน์ PCB โทรศัพท์ อัตรากู้คืนทองคำ 95% ดีบุกและตะกั่วกู้คืนได้ในกระบวนการถลุง"}
-  ].map(x=>({id:uid(),cid:uid(),title:x.title,kind:"text",created:new Date().toISOString(),content:x.content,chunks:chunkText(x.content)}));
-  const links=[{id:uid(),source:srcs[0].cid,relation:"support",target:srcs[1].cid,created:new Date().toISOString()},
-               {id:uid(),source:srcs[0].cid,relation:"related",target:srcs[2].cid,created:new Date().toISOString()}];
-  s.notebooks[id]={id,title:"เกรดโลหะ PCB (ตัวอย่าง)",created:new Date().toISOString(),sources:srcs,notes:[],links};
-  saveStore(s);selected=id;document.getElementById('workCard').style.display='block';setStatus('โหลดตัวอย่างแล้ว ลองค้นหา "ทองคำ"');loadNbs();refreshSelects();renderLinks();
+  const items=[
+    {name:"PCB โทรศัพท์มือถือ",cat:"PCB",comp:"ทองคำ: 350 g/t\nเงิน: 2640 ppm\nทองแดง: 13%\nพาลาเดียม: 119 ppm",note:"อ้างอิง: Sahan 2019, EPA 2018 — ทองคำสูงกว่าแร่ ~100-800 เท่า"},
+    {name:"PCB คอมพิวเตอร์",cat:"PCB",comp:"ทองคำ: 250 g/t\nเงิน: ~1000+ g/t\nทองแดง: 20%\nพาลาเดียม: ~110 g/t",note:"อ้างอิง: Hagelüken — ทองแดงสูงสุดใน PCB"},
+    {name:"เครื่องซักผ้า",cat:"เครื่องใช้ไฟฟ้า",comp:"เหล็ก: โครงเครื่อง\nทองแดง: วงจร/สายไฟ/มอเตอร์\nอะลูมิเนียม: บางส่วน",note:"คอมเพรสเซอร์แยกขายได้ ~15-25 บาท (ทองแดง)"},
+    {name:"สายไฟ",cat:"สายไฟ",comp:"ทองแดง: แกนใน (bare bright สุดค่า)\nพลาสติก: ฉนวน",note:"สายทองแดงเปลือยราคาสูงสุด — ถอดเปลือกก่อนขายคุ้มกว่า"},
+    {name:"iPhone 12 (พัง)",cat:"PCB",comp:"ทองคำ: ~0.034 g/เครื่อง\nเงิน+ทองแดง: แผงวงจร + ขั้วชาร์จ",note:"1 ตัน PCB โทรศัพท์ ≈ ทอง 350 g — เครื่องเดียวน้อย但รวมเยอะ"},
+  ].map(x=>({id:uid(),...x}));
+  const links=[
+    {source:items[0].id,relation:"derived",target:items[4].id},
+    {source:items[1].id,relation:"support",target:items[0].id},
+  ].map(l=>({id:uid(),...l}));
+  save({items,links});
+  refreshSelects();renderLinks();
+  setStatus('โหลดฐานความรู้ตัวอย่างแล้ว — ลองค้นหา "PCB" หรือ "โทรศัพท์"');
+  document.getElementById('askQ').value='PCB โทรศัพท์';ask();
 }
-
-document.getElementById('srcType').addEventListener('change',e=>{document.getElementById('srcFile').style.display=e.target.value==='file'?'block':'none';document.getElementById('srcBody').style.display=e.target.value==='file'?'none':'block';});
-loadNbs();
+refreshSelects();renderLinks();
 </script>
 </body>
 </html>
