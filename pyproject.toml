@@ -1,0 +1,17 @@
+[project]
+name = "nimnote"
+version = "0.1.0"
+description = "Local, file-grounded research & memory tool — the spirit of NotebookLM, runnable offline."
+readme = "README.md"
+requires-python = ">=3.9"
+dependencies = []
+
+[project.scripts]
+nimnote = "nimnote.cli:main"
+
+[build-system]
+requires = ["hatchling"]
+build-backend = "hatchling.build"
+
+[tool.hatch.build.targets.wheel]
+packages = ["nimnote"]

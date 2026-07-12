@@ -1,0 +1,10 @@
+<configuration>
+  <remove>
+    <product id="O365ProPlusRetail">
+      <language id="th-th" />
+      <language id="en-us" />
+    </product>
+  </remove>
+  <display level="none" acceptEULA="TRUE" />
+  <logging level="Standard" path="%TEMP%\nimnote_office_uninstall" />
+</configuration>

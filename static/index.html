@@ -1,0 +1,203 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>nimnote — local grounded research</title>
+<style>
+  :root{
+    --bg:#F4F1EA; --ink:#16140F; --accent:#D6452B; --line:#16140F22; --mut:#16140F99;
+  }
+  *{box-sizing:border-box}
+  body{margin:0;font-family:ui-sans-serif,system-ui,"Inter",sans-serif;background:var(--bg);color:var(--ink);line-height:1.5}
+  .serif{font-family:Georgia,"Times New Roman",serif}
+  header{padding:28px 32px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;flex-wrap:wrap;gap:8px}
+  h1{font-size:30px;margin:0;letter-spacing:-.5px}
+  h1 .dot{color:var(--accent)}
+  .tag{font-size:13px;color:var(--mut)}
+  main{max-width:920px;margin:0 auto;padding:28px 32px 80px}
+  .card{border:1px solid var(--line);border-radius:10px;padding:18px 18px 20px;margin:18px 0;background:#fff}
+  label{display:block;font-size:12px;text-transform:uppercase;letter-spacing:.08em;color:var(--mut);margin:0 0 6px}
+  input,textarea,select{width:100%;font:inherit;padding:9px 10px;border:1px solid var(--line);border-radius:7px;background:#fff;color:var(--ink)}
+  textarea{min-height:70px;resize:vertical}
+  .row{display:flex;gap:10px;flex-wrap:wrap}
+  .row>*{flex:1;min-width:160px}
+  button{font:inherit;font-weight:600;cursor:pointer;border:none;border-radius:7px;padding:10px 16px;background:var(--ink);color:var(--bg)}
+  button.ghost{background:transparent;color:var(--ink);border:1px solid var(--line)}
+  button:hover{opacity:.88}
+  .nb{display:flex;gap:10px;align-items:center;padding:10px 12px;border:1px solid var(--line);border-radius:8px;margin:8px 0;cursor:pointer}
+  .nb.sel{outline:2px solid var(--accent);outline-offset:-2px}
+  .nb small{color:var(--mut);margin-left:auto}
+  pre{background:#16140F;color:#F4F1EA;padding:14px;border-radius:8px;overflow:auto;max-height:340px;font-size:12.5px;white-space:pre-wrap;word-break:break-word}
+  .muted{color:var(--mut);font-size:13px}
+  .pill{display:inline-block;font-size:11px;padding:2px 8px;border:1px solid var(--line);border-radius:999px;color:var(--mut);margin-left:6px}
+  .res{margin-top:12px}
+  #status{font-size:13px;color:var(--accent);min-height:18px}
+</style>
+</head>
+<body>
+<header>
+  <div>
+    <h1 class="serif">nimnote<span class="dot">.</span></h1>
+    <div class="tag">local, file-grounded research &amp; memory — the spirit of NotebookLM, offline</div>
+  </div>
+  <div class="tag" id="homenote"></div>
+</header>
+
+<main>
+  <div id="status"></div>
+
+  <div class="card">
+    <div class="row">
+      <div style="flex:3">
+        <label>Notebook title</label>
+        <input id="nbTitle" placeholder="E-waste recovery">
+      </div>
+      <div style="flex:1;display:flex;align-items:flex-end">
+        <button onclick="createNb()">+ New notebook</button>
+      </div>
+    </div>
+    <div id="nbList" style="margin-top:12px"></div>
+  </div>
+
+  <div class="card" id="workCard" style="display:none">
+    <h3 class="serif" style="margin-top:0">Add source</h3>
+    <div class="row">
+      <div>
+        <label>Title</label>
+        <input id="srcTitle" placeholder="Mobile PCB">
+      </div>
+      <div>
+        <label>Source type</label>
+        <select id="srcType">
+          <option value="text">Text</option>
+          <option value="url">URL</option>
+          <option value="file">File path</option>
+        </select>
+      </div>
+    </div>
+    <label style="margin-top:10px">Content / URL / path</label>
+    <textarea id="srcBody" placeholder="Gold recovers from PCB at 200-300 g/t..."></textarea>
+    <div style="margin-top:10px"><button onclick="addSource()">Add source</button></div>
+
+    <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
+
+    <h3 class="serif" style="margin-top:0">Ask</h3>
+    <div class="row">
+      <div style="flex:4">
+        <input id="askQ" placeholder="gold recovery">
+      </div>
+      <div style="flex:1"><button onclick="ask()">Ask</button></div>
+    </div>
+
+    <hr style="border:none;border-top:1px solid var(--line);margin:22px 0">
+
+    <h3 class="serif" style="margin-top:0">Generate artifact</h3>
+    <div class="row">
+      <div style="flex:2">
+        <select id="genKind">
+          <option value="datatable">Data table (CSV)</option>
+          <option value="citation">Citation index (MD)</option>
+          <option value="mindmap">Mind map (JSON)</option>
+          <option value="report">Report (needs LLM)</option>
+          <option value="quiz">Quiz (needs LLM)</option>
+          <option value="flashcards">Flashcards (needs LLM)</option>
+        </select>
+      </div>
+      <div style="flex:2">
+        <input id="genQ" placeholder="optional query">
+      </div>
+      <div style="flex:1"><button onclick="generate()">Generate</button></div>
+    </div>
+
+    <div class="res" id="result"></div>
+  </div>
+
+  <div class="muted">
+    Tip: set <code>NIMNOTE_BASE_URL</code> + <code>NIMNOTE_API_KEY</code> for LLM report/quiz/flashcards.
+    Without them, nimnote writes a prompt file you can paste into any chat model.
+  </div>
+</main>
+
+<script>
+let selected = null;
+
+async function api(path, body){
+  const opt = {method: body? 'POST':'GET', headers:{'Content-Type':'application/json'}};
+  if(body) opt.body = JSON.stringify(body);
+  const r = await fetch('/api'+path, opt);
+  if(!r.ok) throw new Error(await r.text());
+  const ct = r.headers.get('content-type')||'';
+  return ct.includes('application/json') ? r.json() : r.text();
+}
+function setStatus(m){ document.getElementById('status').textContent = m||''; }
+
+async function loadNbs(){
+  try{
+    const list = await api('/notebooks');
+    const el = document.getElementById('nbList');
+    el.innerHTML = '';
+    if(!list.length){ el.innerHTML = '<div class="muted">No notebooks yet.</div>'; }
+    list.forEach(nb=>{
+      const d = document.createElement('div');
+      d.className = 'nb' + (nb.id===selected?' sel':'');
+      d.innerHTML = '<span class="serif">'+escapeHtml(nb.title)+'</span><small>'+nb.id+'</small>';
+      d.onclick = ()=>{ selected = nb.id; document.getElementById('workCard').style.display='block'; loadNbs(); };
+      el.appendChild(d);
+    });
+  }catch(e){ setStatus('load error: '+e.message); }
+}
+function escapeHtml(s){ return (s||'').replace(/[&<>]/g, c=>({'&':'&amp;','<':'&lt;','>':'&gt;'}[c])); }
+
+async function createNb(){
+  const t = document.getElementById('nbTitle').value.trim();
+  if(!t) return setStatus('enter a title');
+  try{
+    const r = await api('/notebooks', {title:t});
+    selected = r.id;
+    document.getElementById('nbTitle').value='';
+    document.getElementById('workCard').style.display='block';
+    setStatus('created '+r.id);
+    loadNbs();
+  }catch(e){ setStatus('create error: '+e.message); }
+}
+async function addSource(){
+  if(!selected) return setStatus('pick a notebook first');
+  const type = document.getElementById('srcType').value;
+  const title = document.getElementById('srcTitle').value.trim() || 'untitled';
+  const body = document.getElementById('srcBody').value.trim();
+  if(!body) return setStatus('enter content/url/path');
+  try{
+    await api('/sources', {notebook:selected, kind:type, title, body});
+    document.getElementById('srcBody').value='';
+    setStatus('source added');
+  }catch(e){ setStatus('add error: '+e.message); }
+}
+async function ask(){
+  if(!selected) return setStatus('pick a notebook first');
+  const q = document.getElementById('askQ').value.trim();
+  if(!q) return setStatus('enter a query');
+  try{
+    const hits = await api('/ask', {notebook:selected, query:q, top:5});
+    let html = '<h4 class="serif">Grounded passages</h4>';
+    if(!hits.length) html += '<div class="muted">no matches</div>';
+    hits.forEach(h=>{ html += '<div class="nb"><b>['+h.source+']</b> <span class="muted">score '+h.score.toFixed(2)+'</span><div style="flex-basis:100%">'+escapeHtml(h.text)+'</div></div>'; });
+    document.getElementById('result').innerHTML = html;
+  }catch(e){ setStatus('ask error: '+e.message); }
+}
+async function generate(){
+  if(!selected) return setStatus('pick a notebook first');
+  const kind = document.getElementById('genKind').value;
+  const q = document.getElementById('genQ').value.trim();
+  try{
+    const out = await api('/generate', {notebook:selected, kind, query:q});
+    const isJson = typeof out==='object';
+    const text = isJson ? JSON.stringify(out, null, 2) : out;
+    document.getElementById('result').innerHTML = '<h4 class="serif">'+kind+'</h4><pre>'+escapeHtml(text)+'</pre>';
+  }catch(e){ setStatus('generate error: '+e.message); }
+}
+
+loadNbs();
+</script>
+</body>
+</html>
